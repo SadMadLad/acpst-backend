@@ -9,9 +9,13 @@ import morgan from 'morgan';
 import authRoutes from './routes/authRoutes.js';
 
 /* CONFIG FOR CYCLIC */
+const PORT = process.env.PORT || 6001;
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URL);
+    const conn = await mongoose.connect(process.env.MONGO_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
     console.log(error);
@@ -34,11 +38,8 @@ app.use(cors());
 app.use('/auth', authRoutes);
 
 /* MONGODB AND PORT */
-const PORT = process.env.PORT || 6001;
-mongoose
-  .connect(process.env.MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+connectDB().then(() => {
+  app.listen(PORT, () => {
+    console.log("listening for requests");
   })
-  .then(() => app.listen(PORT, () => console.log(`SERVER: ${PORT}`)))
-  .catch(error => console.log(error))
+})
