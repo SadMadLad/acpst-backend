@@ -20,6 +20,7 @@ app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }));
 app.use(cors());
 
 /* ROUTES */
+app.get('/', (_, res) => { res.json('Hi, I am your ACPST server') })
 app.use('/auth', authRoutes);
 
 /* MONGODB AND PORT */
